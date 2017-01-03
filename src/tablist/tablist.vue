@@ -4,7 +4,7 @@
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div v-for="win in windows" class="swiper-slide">
-          <tablist-page :tabs="win.tabs" :thumbs="thumbs" />
+          <tablist-page :tabs="win.tabs" :thumbs="thumbs" @click="tabclick" />
         </div>
       </div>
     </div>
@@ -19,13 +19,18 @@
 
   let tabdata = { windows: [], thumbs: [], selected: {} };
   let EE = new EventEmitter();
+  let port = null
   const chromep = new ChromePromise();
+
   let App = {
     name: "tablist",
     data: function () {
       return tabdata;
     },
     components: { "tablist-page": TablistPage, "win-header": WinHeader },
+    methods: {
+      tabclick: function (tab) { console.log(tab);port.postMessage({ "message": "changeTab", "tabId": tab.id }) }
+    },
     updated: function () {
       const slider = $(".swiper-container");
       if (slider[0].swiper) {
@@ -50,7 +55,6 @@
   };
   export default App;
 
-  let port = null
 
   function getWindows() {
     return new Promise(res => {

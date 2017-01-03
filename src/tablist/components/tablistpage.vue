@@ -1,6 +1,6 @@
 <template>
     <ul :class="tablistClass">
-        <tab v-for="tab in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" @hover="onHover()" />
+        <tab v-for="tab in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" @click="click" />
     </ul>
 </template>
 
@@ -15,15 +15,19 @@ ul.tablist{
     margin:0;
     z-index:1000000;
 }
-ul.tablist30 li{
+ul.tablist9 li{
     width:33%;
     height:33%;
 }
-ul.tablist25 li{
+ul.tablist12 li{
+    width:25%;
+    height:33%;
+}
+ul.tablist16 li{
     width:25%;
     height:23%;
 }
-ul.tablist20 li{
+ul.tablist25 li{
     width:20%;
     height:18%;
 }
@@ -36,16 +40,19 @@ ul.tablist20 li{
         props: {
             "tabs": Array,
             "thumbs": Array,
-            "onHover" : Function
+            "onHover": Function
         },
         computed: {
             tablistClass: function () {
-                const size = (this.tabs.length <= 9 ? 30 : (this.tabs.length <= 16 ? 25 : 20));
+                const size = (this.tabs.length <= 9 ? 9 : (this.tabs.length <= 12 ? 12 : ( this.tabs.length <= 16 ? 16 : 25))) ;
                 return ["tablist", "tablist" + size]
             },
             tabStyle: function () {
                 return this.tabs.length <= 16 ? {} : { height: 100 / (((this.tabs.length + 4) / 5) | 0) + "%" };
             }
+        },
+        methods:{
+            click:function(tab){ this.$emit("click",tab) }
         },
         components: { "tab": Tab }
     }

@@ -1,5 +1,5 @@
 <template>
-    <li class="tab">
+    <li class="tab" @click="click">
         <div class="header">
             <img class="favicon" :src="favicon" />
             <div class="title_url">
@@ -27,7 +27,8 @@
             }
         },
         methods: {
-            close: function () { }
+            close: function() { },
+            click: function() { this.$emit("click",this.tab); }
         }
     }
 </script>
@@ -73,7 +74,7 @@
   display:block;
   clear:both;
   background:#FFF;
-  width:120%;
+  zoom:0.5;
 }
 
 .thumbarea{
