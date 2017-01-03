@@ -21,16 +21,17 @@
         props: { tab: Object, thumb: String },
         computed: {
             favicon: function () {
-                this.tab.faviconUrl || "chrome://faviconi/largest/" + this.tab.url
+                return this.tab.faviconUrl || "chrome://favicon/largest/" + this.tab.url
             }
         },
-        methods : {
-            close : function(){  }
+        methods: {
+            close: function () { }
         }
     }
 </script>
 </script>
 
 <style>
+
 
 </style>
