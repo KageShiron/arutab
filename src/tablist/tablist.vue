@@ -64,4 +64,9 @@
 </script>
 
 <style>
+
+body{
+  background:#333;
+  margin:0;
+}
 </style>
