@@ -1,6 +1,6 @@
 <template>
     <ul :class="tablistClass">
-        <tab v-for="tab in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" @click="click" />
+        <tab v-for="tab in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" @click="click" @mouseenter="mouseenter" />
     </ul>
 </template>
 
@@ -44,15 +44,16 @@ ul.tablist25 li{
         },
         computed: {
             tablistClass: function () {
-                const size = (this.tabs.length <= 9 ? 9 : (this.tabs.length <= 12 ? 12 : ( this.tabs.length <= 16 ? 16 : 25))) ;
+                const size = (this.tabs.length <= 9 ? 9 : (this.tabs.length <= 12 ? 12 : (this.tabs.length <= 16 ? 16 : 25)));
                 return ["tablist", "tablist" + size]
             },
             tabStyle: function () {
                 return this.tabs.length <= 16 ? {} : { height: 100 / (((this.tabs.length + 4) / 5) | 0) + "%" };
             }
         },
-        methods:{
-            click:function(tab){ this.$emit("click",tab) }
+        methods: {
+            click: function (tab) { this.$emit("click", tab) },
+            mouseenter: function (tab) { this.$emit("mouseenter", tab) }
         },
         components: { "tab": Tab }
     }

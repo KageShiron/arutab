@@ -4,7 +4,7 @@
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div v-for="win in windows" class="swiper-slide">
-          <tablist-page :tabs="win.tabs" :thumbs="thumbs" @click="tabclick" />
+          <tablist-page :tabs="win.tabs" :thumbs="thumbs" @click="tabclick" @mouseenter="mouseenter" />
         </div>
       </div>
     </div>
@@ -29,7 +29,8 @@
     },
     components: { "tablist-page": TablistPage, "win-header": WinHeader },
     methods: {
-      tabclick: function (tab) { console.log(tab);port.postMessage({ "message": "changeTab", "tabId": tab.id }) }
+      tabclick: function (tab) { port.postMessage({ "message": "changeTab", "tabId": tab.id }) },
+      mouseenter: function (tab) { tabdata.selected = tab }
     },
     updated: function () {
       const slider = $(".swiper-container");

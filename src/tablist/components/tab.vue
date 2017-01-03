@@ -1,5 +1,5 @@
 <template>
-    <li class="tab" @click="click">
+    <li class="tab" @click="click" @mouseenter="mouseenter">
         <div class="header">
             <img class="favicon" :src="favicon" />
             <div class="title_url">
@@ -27,8 +27,9 @@
             }
         },
         methods: {
-            close: function() { },
-            click: function() { this.$emit("click",this.tab); }
+            close: function () { },
+            click: function () { this.$emit("click", this.tab); },
+            mouseenter: function () { this.$emit("mouseenter", this.tab); }
         }
     }
 </script>

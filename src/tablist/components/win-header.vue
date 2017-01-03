@@ -1,7 +1,7 @@
 <template>
     <div class="win-header">
         <div class="header">
-            <img class="favicon" :src="selected.favicon" />
+            <img class="favicon" :src="favicon" />
             <div class="title_url">
                 <span class="title">{{ selected.title }}</span><br />
                 <span class="url">{{ selected.url }}</span>
@@ -20,10 +20,15 @@
 
 <script>
     export default {
-        name : "win-header",
-        props : { 
-            "selected" : Object
-         }
+        name: "win-header",
+        props: {
+            "selected": Object
+        },
+        computed: {
+            favicon: function () {
+                return this.selected.faviconUrl || "chrome://favicon/largest/" + this.selected.url
+            }
+        }
     }
 </script>
 
