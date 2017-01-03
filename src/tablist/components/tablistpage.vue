@@ -1,6 +1,8 @@
 <template>
     <ul :class="tablistClass">
-        <tab v-for="tab in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" @click="click" @mouseenter="mouseenter" />
+        <tab v-for="tab in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" 
+        @click="emitEvent('click',$event)" @mouseenter="emitEvent('mouseenter',$event)" @close="emitEvent('close',$event)"
+        />
     </ul>
 </template>
 
@@ -39,7 +41,7 @@ ul.tablist25 li{
         name: "tablist-page",
         props: {
             "tabs": Array,
-            "thumbs": Array,
+            "thumbs": Object,
             "onHover": Function
         },
         computed: {
@@ -52,8 +54,7 @@ ul.tablist25 li{
             }
         },
         methods: {
-            click: function (tab) { this.$emit("click", tab) },
-            mouseenter: function (tab) { this.$emit("mouseenter", tab) }
+            emitEvent: function (name, tab) { this.$emit(name, tab); }
         },
         components: { "tab": Tab }
     }

@@ -1,12 +1,12 @@
 <template>
-    <li class="tab" @click="click" @mouseenter="mouseenter">
+    <li class="tab" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')">
         <div class="header">
             <img class="favicon" :src="favicon" />
             <div class="title_url">
                 <span class="title">{{ tab.title }}</span><br />
                 <span class="url">{{ tab.url }}</span>
             </div>
-            <div class="closebutton" @click.stop="close">
+            <div class="closebutton" @click.stop="emitEvent('close')">
                 <img src="../assets/close.svg" />
             </div>
         </div>
@@ -27,9 +27,7 @@
             }
         },
         methods: {
-            close: function () { },
-            click: function () { this.$emit("click", this.tab); },
-            mouseenter: function () { this.$emit("mouseenter", this.tab); }
+            emitEvent: function(name) { this.$emit(name,this.tab) }
         }
     }
 </script>

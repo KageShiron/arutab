@@ -4,7 +4,7 @@
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div v-for="win in windows" class="swiper-slide">
-          <tablist-page :tabs="win.tabs" :thumbs="thumbs" @click="tabclick" @mouseenter="mouseenter" />
+          <tablist-page :tabs="win.tabs" :thumbs="thumbs" @click="tabclick" @mouseenter="mouseenter" @close="close" />
         </div>
       </div>
     </div>
@@ -22,6 +22,10 @@
   let port = null
   const chromep = new ChromePromise();
 
+  function closeTab(tabid) {
+    port.postMessage({ "message": "closeTab", "tabId": tabid });
+  }
+
   let App = {
     name: "tablist",
     data: function () {
@@ -30,7 +34,8 @@
     components: { "tablist-page": TablistPage, "win-header": WinHeader },
     methods: {
       tabclick: function (tab) { port.postMessage({ "message": "changeTab", "tabId": tab.id }) },
-      mouseenter: function (tab) { tabdata.selected = tab }
+      mouseenter: function (tab) { tabdata.selected = tab },
+      close: function (tab) { closeTab(tab.id); }
     },
     updated: function () {
       const slider = $(".swiper-container");
