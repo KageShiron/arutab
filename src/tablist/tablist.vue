@@ -1,6 +1,13 @@
 <template>
   <div id="tablist">
-    <tablist-page v-for="win in windows" :tabs="win.tabs" :thumbs="thumbs" >
+    <win-header :selected="selected" />
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div v-for="win in windows" class="swiper-slide">
+          <tablist-page :tabs="win.tabs" :thumbs="thumbs" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -8,8 +15,9 @@
   import EventEmitter from 'eventemitter3'
   import TablistPage from './components/tablistpage.vue'
   import ChromePromise from "chrome-promise"
+  import WinHeader from "./components/win-header.vue"
 
-  let tabdata = { windows: [] , thumbs : [] };
+  let tabdata = { windows: [], thumbs: [], selected: {} };
   let EE = new EventEmitter();
   const chromep = new ChromePromise();
   let App = {
@@ -17,7 +25,28 @@
     data: function () {
       return tabdata;
     },
-    components: { "tablist-page": TablistPage }
+    components: { "tablist-page": TablistPage, "win-header": WinHeader },
+    updated: function () {
+      const slider = $(".swiper-container");
+      if (slider[0].swiper) {
+        slider[0].swiper.update();
+      } else {
+        slider.swiper({
+          mousewheelControl: true,    // Optional parameters
+          loop: true,
+
+          // If we need pagination
+          pagination: '.swiper-pagination',
+          paginationClickable: true,
+
+          // Navigation arrows
+          nextButton: '.swiper-button-next',
+          prevButton: '.swiper-button-prev',
+          onSlideChangeEnd: (s) => { console.log(s); s.fixLoop(); }
+
+        });
+      }
+    }
   };
   export default App;
 
@@ -48,10 +77,10 @@
       tabdata.windows = wins;
 
       let def = [];
-      for( const w of wins) 
-          for (const t of w.tabs) def.push("" + t.id);
+      for (const w of wins)
+        for (const t of w.tabs) def.push("" + t.id);
 
-      chromep.storage.local.get(def).then( items => {
+      chromep.storage.local.get(def).then(items => {
         console.log(items);
         tabdata.thumbs = items;
       });

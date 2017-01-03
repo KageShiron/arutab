@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/tablist/tablist.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    publicPath: '/',
     filename: 'tablist/tablist.js'
   },
   module: {
@@ -33,7 +33,7 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
+          name: './[name].[ext]'
         }
       }
     ]

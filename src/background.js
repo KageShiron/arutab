@@ -48,8 +48,8 @@ function reductionImage(source, id) {
     var img = new Image();
     img.onload = () => {
         const can = document.createElement("canvas");
-        can.width = img.width / 3;
-        can.height = img.height / 3;
+        can.width = img.width / 2;
+        can.height = img.height / 2;
         const ctx = can.getContext("2d");
         ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, can.width, can.height);
         let obj = {};
