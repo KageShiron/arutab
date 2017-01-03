@@ -9,7 +9,7 @@ gulp.task('webpack', function () {
 });
 
 gulp.task('copy',function () {
-    gulp.src( [ "./src/*.html" , "./src/*.json" , "./src/lib/*"],
+    gulp.src( [ "./src/**/*.html" , "./src/**/*.json" , "./src/lib/*"],
     {base:"src"} )
     .pipe( gulp.dest("./dist") );
 })

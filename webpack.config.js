@@ -2,11 +2,11 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/tablist.js',
+  entry: './src/tablist/tablist.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'tablist.js'
+    filename: 'tablist/tablist.js'
   },
   module: {
     rules: [
