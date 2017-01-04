@@ -33,7 +33,8 @@
             },
             tabClass: function () {
                 return ["tab", this.closing ? "closing" : ""
-                    , this.touch.deltaY > 250 ? "touchclosing" : ""
+                    , this.touch.deltaY != 0 ? "touching" : ""
+                    , (this.touch.deltaY < -250 || this.touch.deltaY) > 250 ? "touchclosing" : ""
                     , this.tab.highlighted ? "highlight" : ""];
             },
             tabStyle: function () {
@@ -91,6 +92,7 @@
   box-sizing: border-box;
   padding:10px;
   position:relative;
+  background-color:#333;
   transition:left 100ms ease,
                 width 200ms ease;
 }
@@ -176,8 +178,15 @@
     color:#999;
 }
 
+.closing.touchclosing{
+    opacity:0!important;
+}
 .touchclosing{
     background: #660000 !important;
+}
+
+.touching{
+    z-index:99999;
 }
 
 

@@ -78,11 +78,11 @@ chrome.tabs.onUpdated.addListener((id, changeInfo, tab) => {
     updatedTabs();
 });
 chrome.tabs.onRemoved.addListener((id, _) => {
-    chrome.storage.local.remove(id);
+    chrome.storage.local.remove(["" + id]);
     updatedTabs();
 });
 chrome.tabs.onReplaced.addListener((add, remove) => {
-    chrome.storage.local.remove(remove);
+    chrome.storage.local.remove(["" + remove]);
     updatedTabs();
 });
 chrome.tabs.onCreated.addListener((add) => {
