@@ -1,12 +1,12 @@
 <template>
-    <li class="tab" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')">
+    <li :key="tab.id" :class="tabClass" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')">
         <div class="header">
             <img class="favicon" :src="favicon" />
             <div class="title_url">
                 <span class="title">{{ tab.title }}</span><br />
                 <span class="url">{{ tab.url }}</span>
             </div>
-            <div class="closebutton" @click.stop="emitEvent('close')">
+            <div class="closebutton" @click.stop="close">
                 <img src="../assets/close.svg" />
             </div>
         </div>
@@ -21,13 +21,21 @@
     export default {
         name: "tab",
         props: { tab: Object, thumb: String },
+        data: function () { return { closing: false } },
         computed: {
             favicon: function () {
                 return this.tab.faviconUrl || "chrome://favicon/largest/" + this.tab.url
+            },
+            tabClass: function () {
+                return ["tab", this.closing ? "closing" : ""];
             }
         },
         methods: {
-            emitEvent: function(name) { this.$emit(name,this.tab) }
+            emitEvent: function (name) { this.$emit(name, this.tab) },
+            close: function () {
+                this.closing = true;
+                this.emitEvent("close");
+            }
         }
     }
 </script>
@@ -51,7 +59,7 @@
   padding:10px;
   position:relative;
   transition:left 100ms ease,
-                width 1000ms ease;
+                width 200ms ease;
 }
 
 

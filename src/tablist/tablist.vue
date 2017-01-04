@@ -19,11 +19,25 @@
 
   let tabdata = { windows: [], thumbs: [], selected: {} };
   let EE = new EventEmitter();
-  let port = null
+  let port = null;
+  let closeTimer = null;
+  let closingTabs = [];
   const chromep = new ChromePromise();
 
   function closeTab(tabid) {
     port.postMessage({ "message": "closeTab", "tabId": tabid });
+  }
+
+  function closingTab() {
+
+    $(".closing").css("width", "0").delay(180).queue(() => {
+      for (const w of tabdata.windows) {
+        w.tabs.forEach((t, i) => {
+          closingTabs.forEach(cid => { if (t.id === cid) { w.tabs.splice(i, 1); } })
+        });
+        w.tabs.forEach(t => console.log(t.id));
+      }
+    });
   }
 
   let App = {
@@ -35,7 +49,13 @@
     methods: {
       tabclick: function (tab) { port.postMessage({ "message": "changeTab", "tabId": tab.id }) },
       mouseenter: function (tab) { tabdata.selected = tab },
-      close: function (tab) { closeTab(tab.id); }
+      close: function (tab) {
+        closeTab(tab.id);
+        closingTabs.push(tab.id);
+        if (closeTimer) clearTimeout(closeTimer);
+        closeTimer = setTimeout(() => closingTab(tab.id), 1000);
+
+      }
     },
     updated: function () {
       const slider = $(".swiper-container");
@@ -53,7 +73,7 @@
           // Navigation arrows
           nextButton: '.swiper-button-next',
           prevButton: '.swiper-button-prev',
-          onSlideChangeEnd: (s) => { console.log(s); s.fixLoop(); }
+          onSlideChangeEnd: (s) => { s.fixLoop(); }
 
         });
       }
@@ -91,7 +111,6 @@
         for (const t of w.tabs) def.push("" + t.id);
 
       chromep.storage.local.get(def).then(items => {
-        console.log(items);
         tabdata.thumbs = items;
       });
     });

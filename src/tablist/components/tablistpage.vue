@@ -1,8 +1,7 @@
 <template>
     <ul :class="tablistClass">
-        <tab v-for="tab in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" 
-        @click="emitEvent('click',$event)" @mouseenter="emitEvent('mouseenter',$event)" @close="emitEvent('close',$event)"
-        />
+        <tab v-for="(tab,key) in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" @click="emitEvent('click',$event)" @mouseenter="emitEvent('mouseenter',$event)"
+            @close="emitEvent('close',$event)" />
     </ul>
 </template>
 

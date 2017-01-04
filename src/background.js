@@ -53,7 +53,7 @@ function reductionImage(source, id) {
         const ctx = can.getContext("2d");
         ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, can.width, can.height);
         let obj = {};
-        obj[id] = can.toDataURL();
+        obj[id] = can.toDataURL("image/jpeg");
         chrome.storage.local.set(obj, () => { });
     };
 
