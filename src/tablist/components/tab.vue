@@ -1,5 +1,6 @@
 <template>
-    <li :key="tab.id" :class="tabClass" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')">
+    <li :class="tabClass" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)"
+        @touchmove.prevent="touchMove($event)" @touchend="touchEnd($event)" :style="tabStyle">
         <div class="header">
             <img class="favicon" :src="favicon" />
             <div class="title_url">
@@ -8,6 +9,10 @@
             </div>
             <div class="closebutton" @click.stop="close">
                 <img src="../assets/close.svg" />
+            </div>
+            <div :class="['tabinfo',{visible : tab.pinned || tab.audible}]">
+                <img :class="{'visible' : tab.pinned}" src="../assets/pinned.svg" />
+                <img :class="{'visible' : tab.audible }" src="../assets/audible.svg" />
             </div>
         </div>
         </div>
@@ -21,13 +26,21 @@
     export default {
         name: "tab",
         props: { tab: Object, thumb: String },
-        data: function () { return { closing: false } },
+        data: function () { return { closing: false, touch: { x: NaN, y: NaN, deltaX: 0, deltaY: 0 } } },
         computed: {
             favicon: function () {
                 return this.tab.faviconUrl || "chrome://favicon/largest/" + this.tab.url
             },
             tabClass: function () {
-                return ["tab", this.closing ? "closing" : ""];
+                return ["tab", this.closing ? "closing" : ""
+                    , this.touch.deltaY > 250 ? "touchclosing" : ""
+                    , this.tab.highlighted ? "highlight" : ""];
+            },
+            tabStyle: function () {
+                return {
+                    "opacity": ((this.touch.deltaY < -100 || this.touch.deltaY > 100) ? (300 - Math.abs(this.touch.deltaY)) / 200 + 0.5 : 1),
+                    "top": this.touch.deltaY + "px"
+                }
             }
         },
         methods: {
@@ -35,7 +48,27 @@
             close: function () {
                 this.closing = true;
                 this.emitEvent("close");
+            },
+            touchStart: function (e) {
+                this.touch.y = e.touches[0].pageY;
+            },
+            touchMove: function (e) {
+                const deltaY = e.touches[0].pageY - this.touch.y;
+                if (deltaY > 130 || deltaY < -130)
+                    this.touch.deltaY = deltaY;
+                else
+                    this.touch.deltaY = 0;
+            },
+            touchEnd: function (e) {
+                this.touch.y = NaN;
+                const delta = Math.abs(this.touch.deltaY);
+                if (delta > 250) {
+                    this.close();
+                } else {
+                    this.touch.deltaY = 0;
+                }
             }
+
         }
     }
 </script>
@@ -129,7 +162,7 @@
 }
 
 
-.tab.actived{
+.tab.highlight{
     background-color:#445;
 }
 
@@ -141,6 +174,46 @@
     font-size:13px;
     line-height:13px;
     color:#999;
+}
+
+.touchclosing{
+    background: #660000 !important;
+}
+
+
+.tabinfo img{
+    display:none;
+}
+
+.tabinfo img.visible{
+    display:block;
+    margin-right:5px;
+    background-color:rgba(255,255,255,0.5);
+}
+
+.tabinfo{
+    position:absolute;
+    float:right;
+    right:10px;
+    bottom:10px;
+    height:30px;
+    color:#999;
+    text-align:center;
+    vertical-align: middle;
+    font-size:40px;
+    justify-content: center;
+    align-items: center;
+    display:none;
+}
+
+.tabinfo.visible{
+    display:flex;
+}
+
+.tab:hover .tabinfo{
+    bottom:7px;
+    right:7px;
+    background-color:rgba(255,255,255,0.5);
 }
 
 </style>

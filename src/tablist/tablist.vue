@@ -61,6 +61,10 @@
       const slider = $(".swiper-container");
       if (slider[0].swiper) {
         slider[0].swiper.update();
+        if (tabdata.windows.length == 1)
+          slider[0].swiper.lockSwipes();
+        else
+          slider[0].swiper.unlockSwipes();
       } else {
         slider.swiper({
           mousewheelControl: true,    // Optional parameters
@@ -76,6 +80,10 @@
           onSlideChangeEnd: (s) => { s.fixLoop(); }
 
         });
+        if (tabdata.windows.length == 1)
+          slider[0].swiper.lockSwipes();
+        else
+          slider[0].swiper.unlockSwipes();
       }
     }
   };
