@@ -29,7 +29,7 @@
         data: function () { return { closing: false, touch: { x: NaN, y: NaN, deltaX: 0, deltaY: 0 } } },
         computed: {
             favicon: function () {
-                return this.tab.faviconUrl || "chrome://favicon/largest/" + this.tab.url
+                return this.tab.faviconUrl || "chrome://favicon/size/16@2x/" + this.tab.url
             },
             tabClass: function () {
                 return ["tab", this.closing ? "closing" : ""
