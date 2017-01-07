@@ -1,6 +1,6 @@
 <template>
   <div id="tablist">
-    <win-header :selected="selected" />
+    <win-header :selected="selected" @closeWindow="closeWindow" />
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div v-for="win in windows" class="swiper-slide">
@@ -17,7 +17,7 @@
   import ChromePromise from "chrome-promise"
   import WinHeader from "./components/win-header.vue"
 
-  let tabdata = { windows: [], thumbs: [], selected: {} };
+  let tabdata = { windows: [], thumbs: [], selected: {}  };
   let EE = new EventEmitter();
   let port = null;
   let closeTimer = null;
@@ -26,6 +26,15 @@
 
   function closeTab(tabid) {
     port.postMessage({ "message": "closeTab", "tabId": tabid });
+  }
+
+  function closeAruTab() {
+    port.postMessage({ "message": "closeAruTab" });
+  }
+
+  function changeTab(tabid,winid) {
+    $("html").css("display","none").remove();
+    port.postMessage({ "message": "changeTab", "tabId": tabid  });
   }
 
   function closingTab() {
@@ -47,7 +56,7 @@
     },
     components: { "tablist-page": TablistPage, "win-header": WinHeader },
     methods: {
-      tabclick: function (tab) { port.postMessage({ "message": "changeTab", "tabId": tab.id }) },
+      tabclick: function (tab) { changeTab(tab.id,tab.windowId); },
       mouseenter: function (tab) { tabdata.selected = tab },
       close: function (tab) {
         closeTab(tab.id);
@@ -55,6 +64,9 @@
         if (closeTimer) clearTimeout(closeTimer);
         closeTimer = setTimeout(() => closingTab(tab.id), 1000);
 
+      },
+      closeWindow: function () {
+        closeAruTab();
       }
     },
     updated: function () {
@@ -134,5 +146,8 @@
 body{
   background:#333;
   margin:0;
+}
+.tablist-invisible{
+  display:none;
 }
 </style>

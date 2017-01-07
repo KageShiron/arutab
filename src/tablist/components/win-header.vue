@@ -13,7 +13,7 @@
             <div class="swiper-button-next"></div>
 
             <div class="swiper-scrollbar"></div>
-            <div class="frameclose"><img src="../assets/close.svg" /></div>
+            <div class="frameclose" @click="closeWindow" ><img src="../assets/close.svg" /></div>
         </div>
     </div>
 </template>
@@ -26,8 +26,11 @@
         },
         computed: {
             favicon: function () {
-                return this.selected.faviconUrl || "chrome://favicon/largest/" + this.selected.url
+                return this.selected.favIconUrl || "chrome://favicon/largest/" + this.selected.url
             }
+        },
+        methods : {
+            closeWindow : function(){ this.$emit("closeWindow"); }
         }
     }
 </script>

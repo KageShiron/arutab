@@ -8,7 +8,27 @@
         "tabs",
         "storage"
     ],
-    "background": {"scripts": [
-        "background.js"
-    ]}
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "lib/jquery.min.js",
+                "content/content.js"
+            ],
+            "css": [
+                "content/content.css"
+            ],
+            "run_at": "document_start"
+        }
+    ],
+    "web_accessible_resources": [
+        "tablist/tablist.html"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    }
 }

@@ -29,7 +29,7 @@
         data: function () { return { closing: false, touch: { x: NaN, y: NaN, deltaX: 0, deltaY: 0 } } },
         computed: {
             favicon: function () {
-                return this.tab.faviconUrl || "chrome://favicon/size/16@2x/" + this.tab.url
+                return this.tab.favIconUrl || "chrome://favicon/size/16@2x/" + this.tab.url
             },
             tabClass: function () {
                 return ["tab", this.closing ? "closing" : ""
@@ -223,6 +223,22 @@
     bottom:7px;
     right:7px;
     background-color:rgba(255,255,255,0.5);
+}
+
+
+.frameclose{
+    height:55px;
+    width:70px;
+    background:rgba(200,200,200,0.5);
+    z-index:9999;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-left:50px;
+}
+.frameclose img{
+    width:50%;
+    height:50%;
 }
 
 </style>

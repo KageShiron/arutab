@@ -13,7 +13,7 @@ gulp.task('webpack', function (callback) { // run webpack
 });
 
 gulp.task('copy',function () {
-    gulp.src( [ "./src/**/*.html" , "./src/**/*.json" , "./src/lib/*" , "./src/background.js"],
+    gulp.src( [ "./src/**/*.html" , "./src/**/*.json" , "./src/lib/*" , "./src/content/*" , "./src/background.js"],
     {base:"src"} )
     .pipe( gulp.dest("./dist") );
 })
