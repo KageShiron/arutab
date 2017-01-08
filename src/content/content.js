@@ -1,27 +1,70 @@
-function openAruTab()
-{
-    if($("#arutab-insert-iframe").length == 0)
-    {
-        jQuery("<iframe>").attr("id", "arutab-insert-iframe").addClass("arutab-iframe-visible")
+function openAruTab() {
+    if ($("#arutab-insert-iframe").length == 0) {
+        jQuery("<iframe>").attr("id", "arutab-insert-iframe")
             .attr("src", chrome.runtime.getURL("tablist/tablist.html"))
+            .on("load", function () { $(this).addClass("arutab-iframe-visible") })
             .appendTo("body");
-            //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
+        //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
     }
 }
-    
+
 function closeAruTab() {
     jQuery("#arutab-insert-iframe").remove();
 }
 
-chrome.runtime.onMessage.addListener( msg => {
+chrome.runtime.onMessage.addListener(msg => {
     if (msg.message == "closeAruTab") closeAruTab();
 });
 
-$( function(){
-    $(document).on("keydown",e => {
-        if(e.ctrlKey && e.keyCode == 81)
-        {
+$(function () {
+    $(document).on("keydown", e => {
+        if (e.ctrlKey && e.keyCode == 81) {
             openAruTab();
         }
     })
+});
+keyStatus = {};
+
+
+$(document).on("keydown", (e) => {
+    if (e.keyCode == 27 && jQuery("#arutab-insert-iframe").length != 0) {
+        closeAruTab();
+    }
+    console.log(`down/${keyStatus.isTouchPad}/${e.ctrlKey}/${keyStatus.isShortCtrlKey}/${keyStatus.ctrlKey}`);
+    if (e.keyCode == 17 && !keyStatus.ctrlKey) {
+        keyStatus.ctrlKey = true;
+        keyStatus.isShortCtrlKey = true;
+        setTimeout(() => {
+            keyStatus.isShortCtrlKey = false
+            console.log("shortTime");
+        }, 50);
+    }
+});
+document.addEventListener("keyup", (e) => {
+    console.log(`up/${keyStatus.isTouchPad}/${e.ctrlKey}/${keyStatus.isShortCtrlKey}/${keyStatus.ctrlKey}`);
+    if (e.keyCode == 17) {
+        keyStatus.ctrlKey = false;
+        keyStatus.isShortCtrlKey = false;
+        keyStatus.isTouchPad = false;
+    }
+}
+);
+window.addEventListener("mousewheel", (e) => {
+    console.log(`wheel/${keyStatus.isTouchPad}/${e.ctrlKey}/${keyStatus.isShortCtrlKey}/${keyStatus.ctrlKey}`);
+
+    if (keyStatus.isTouchPad) { e.preventDefault(); return; }
+    if (!e.ctrlKey) return;
+
+    if (keyStatus.ctrlKey && !keyStatus.isShortCtrlKey) {
+        return;
+    } else {
+        console.log("prevent");
+        e.preventDefault();
+        keyStatus.isTouchPad = true;
+        if (jQuery("#arutab-insert-iframe").length != 0) return;
+        setTimeout(openAruTab, 0);
+    }
+    ;
+    return;
+
 });
