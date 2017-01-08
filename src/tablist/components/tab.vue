@@ -29,7 +29,7 @@
         data: function () { return { closing: false, touch: { x: NaN, y: NaN, deltaX: 0, deltaY: 0 } } },
         computed: {
             favicon: function () {
-                return this.tab.favIconUrl || "chrome://favicon/size/16@2x/" + this.tab.url
+                return this.tab.favIconUrl || "";//chrome://favicon/size/16@2x/" + this.tab.url
             },
             tabClass: function () {
                 return ["tab", this.closing ? "closing" : ""
@@ -111,12 +111,18 @@
 .closebutton:hover{
     background-color:rgba(255,200,200,0.8);
 }
+
+
 .thumb{
   border:1px solid #444;
   display:block;
   clear:both;
   background:#FFF;
   zoom:0.5;
+}
+
+ul.tablist9 .thumb , ul.tablist6 .thumb{
+    zoom:0.8;
 }
 
 .thumbarea{
@@ -240,5 +246,7 @@
     width:50%;
     height:50%;
 }
+
+
 
 </style>

@@ -26,7 +26,7 @@
         },
         computed: {
             favicon: function () {
-                return this.selected.favIconUrl || "chrome://favicon/largest/" + this.selected.url
+                return this.selected.favIconUrl || "";// "chrome://favicon/largest/" + this.selected.url
             }
         },
         methods : {
