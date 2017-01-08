@@ -15,6 +15,7 @@ chrome.runtime.onConnect.addListener(p => {
                 break;
             case "changeTab":
                 chrome.tabs.update(msg.tabId, { active: true });
+                chrome.windows.update(msg.windowId,{focused:true});
                 closeAruTab();
                 break;
             case "closeTab":

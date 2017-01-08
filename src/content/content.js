@@ -1,9 +1,12 @@
 function openAruTab()
 {
-    jQuery("<iframe>").attr("id", "arutab-insert-iframe").addClass("arutab-iframe-visible")
-        .attr("src", chrome.runtime.getURL("tablist/tablist.html"))
-        .appendTo("body");
-        //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
+    if($("#arutab-insert-iframe").length == 0)
+    {
+        jQuery("<iframe>").attr("id", "arutab-insert-iframe").addClass("arutab-iframe-visible")
+            .attr("src", chrome.runtime.getURL("tablist/tablist.html"))
+            .appendTo("body");
+            //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
+    }
 }
     
 function closeAruTab() {

@@ -17,7 +17,7 @@
   import ChromePromise from "chrome-promise"
   import WinHeader from "./components/win-header.vue"
 
-  let tabdata = { windows: [], thumbs: [], selected: {}  };
+  let tabdata = { windows: [], thumbs: [], selected: {} };
   let EE = new EventEmitter();
   let port = null;
   let closeTimer = null;
@@ -32,9 +32,9 @@
     port.postMessage({ "message": "closeAruTab" });
   }
 
-  function changeTab(tabid,winid) {
-    $("html").css("display","none").remove();
-    port.postMessage({ "message": "changeTab", "tabId": tabid  });
+  function changeTab(tabid, winid) {
+    $("html").css("display", "none").remove();
+    port.postMessage({ "message": "changeTab", "tabId": tabid, "windowId": winid });
   }
 
   function closingTab() {
@@ -56,7 +56,7 @@
     },
     components: { "tablist-page": TablistPage, "win-header": WinHeader },
     methods: {
-      tabclick: function (tab) { changeTab(tab.id,tab.windowId); },
+      tabclick: function (tab) { changeTab(tab.id, tab.windowId); },
       mouseenter: function (tab) { tabdata.selected = tab },
       close: function (tab) {
         closeTab(tab.id);
