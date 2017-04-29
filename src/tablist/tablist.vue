@@ -17,7 +17,7 @@
   import ChromePromise from "chrome-promise"
   import WinHeader from "./components/win-header.vue"
 
-  let tabdata = { windows: [], thumbs: [], selected: {} };
+  let tabdata = { windows: [], thumbs: [], selected: {}, focused: NaN };
   let EE = new EventEmitter();
   let port = null;
   let closeTimer = null;
@@ -70,6 +70,7 @@
       }
     },
     updated: function () {
+      if (isNaN(tabdata.focused)) return;
       const slider = $(".swiper-container");
       if (slider[0].swiper) {
         slider[0].swiper.update();
@@ -81,6 +82,7 @@
         slider.swiper({
           mousewheelControl: true,    // Optional parameters
           loop: true,
+          initialSlide: tabdata.focused,
 
           // If we need pagination
           pagination: '.swiper-pagination',
@@ -123,12 +125,14 @@
 
   function initWindows() {
     getWindows().then(wins => {
-      console.log(wins);
       tabdata.windows = wins;
 
       let def = [];
-      for (const w of wins)
+      //for (const w of wins){
+      wins.forEach((w, index) => {
+        if (w.focused) tabdata.focused = index;
         for (const t of w.tabs) def.push("" + t.id);
+      });
 
       chromep.storage.local.get(def).then(items => {
         tabdata.thumbs = items;
