@@ -29,10 +29,6 @@
     this.tabadata.port.postMessage({ "message": "closeAruTab" });
   }
 
-  function changeTab(tabid, winid) {
-    $("html").css("display", "none").remove();
-    tabdata.port.postMessage({ "message": "changeTab", "tabId": tabid, "windowId": winid });
-  }
 
   let App = {
     name: "tablist",

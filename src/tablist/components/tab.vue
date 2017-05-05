@@ -1,5 +1,5 @@
 <template>
-    <li :class="tabClass" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)"
+    <li :class="tabClass" @click="click($event)" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)"
         @wheel="wheel" @touchmove.prevent="touchMove($event)" @touchend="touchEnd($event)" :style="tabStyle">
         <div class="header">
             <img class="favicon" :src="favicon" />
@@ -62,6 +62,17 @@
             emitEvent: function (name) { this.$emit(name, this.tab) },
             close: function () {
                 this.closeTab(this.tab);
+            },
+            changeTab: function () {
+                $("html").css("display", "none").remove();
+                this.port.postMessage({
+                    "message": "changeTab",
+                    "tabId": this.tab.id, 
+                    "windowId": this.tab.windowId
+                });
+            },
+            click:function(e){
+                this.changeTab();
             },
             touchStart: function (e) {
                 this.touch.y = e.touches[0].pageY;
