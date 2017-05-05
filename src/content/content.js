@@ -1,15 +1,24 @@
 function openAruTab() {
-    if ($("#arutab-insert-iframe").length == 0) {
-        jQuery("<iframe>").attr("id", "arutab-insert-iframe")
-            .attr("src", chrome.runtime.getURL("tablist/tablist.html"))
-            .on("load", function () { $(this).addClass("arutab-iframe-visible") })
-            .appendTo("body");
+    if ($("#arutab-insert-container").length == 0) {
+        jQuery("<div id='arutab-insert-container'/>").append(
+            jQuery("<iframe>").attr("id", "arutab-insert-iframe")
+                .attr("src", chrome.runtime.getURL("tablist/tablist.html"))
+                .on("load", function () { $("#arutab-insert-container").addClass("arutab-container-visible") })
+        ).on("click",frameMarginClick).appendTo("body")
         //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
     }
 }
 
+function frameMarginClick(e)
+{
+    if (e.target.id === "arutab-insert-container")
+    {
+        closeAruTab();
+    }    
+}
+
 function closeAruTab() {
-    jQuery("#arutab-insert-iframe").remove();
+    jQuery("#arutab-insert-container").remove();
 }
 
 chrome.runtime.onMessage.addListener(msg => {
