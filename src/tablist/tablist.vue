@@ -4,7 +4,7 @@
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div v-for="win in windows" class="swiper-slide">
-          <tablist-page :tabs="win.tabs" :thumbs="thumbs" @click="tabclick" @mouseenter="mouseenter" @close="close" />
+          <tablist-page :tabs="win.tabs" :thumbs="thumbs" :port="port" @click="tabclick" @mouseenter="mouseenter" @close="close" />
         </div>
       </div>
     </div>
@@ -16,26 +16,22 @@
   import TablistPage from './components/tablistpage.vue'
   import ChromePromise from "chrome-promise"
   import WinHeader from "./components/win-header.vue"
+  import eventHub from "./tablist.js"
 
-  let tabdata = { windows: [], thumbs: [], selected: {}, focused: NaN };
+  let tabdata = { windows: [], thumbs: [], selected: {}, focused: NaN , port:null };
   let EE = new EventEmitter();
-  let port = null;
   let closeTimer = null;
   let closingTabs = [];
   const chromep = new ChromePromise();
 
-  function closeTab(tabid) {
-    port.postMessage({ "message": "closeTab", "tabId": tabid }); 
-    $(".closing").addClass("closed");
-  }
 
   function closeAruTab() {
-    port.postMessage({ "message": "closeAruTab" });
+    this.tabadata.port.postMessage({ "message": "closeAruTab" });
   }
 
   function changeTab(tabid, winid) {
     $("html").css("display", "none").remove();
-    port.postMessage({ "message": "changeTab", "tabId": tabid, "windowId": winid });
+    tabdata.port.postMessage({ "message": "changeTab", "tabId": tabid, "windowId": winid });
   }
 
   let App = {
@@ -48,9 +44,7 @@
       tabclick: function (tab) { changeTab(tab.id, tab.windowId); },
       mouseenter: function (tab) { tabdata.selected = tab },
       close: function (tab) {
-        if (closingTabs.includes(tab.id))return;
-        closeTab(tab.id);
-
+        eventHub.$emit("tab-close",tab);
       },
       closeWindow: function () {
         closeAruTab();
@@ -94,14 +88,14 @@
 
   function getWindows() {
     return new Promise(res => {
-      port.postMessage({ "message": "getWindows" });
+      tabdata.port.postMessage({ "message": "getWindows" });
       EE.once("getWindows", res);
     });
   }
 
   function initConnection() {
-    port = chrome.runtime.connect(null, {});
-    port.onMessage.addListener((arg) => {
+    tabdata.port = chrome.runtime.connect(null, {});
+    tabdata.port.onMessage.addListener((arg) => {
       switch (arg.message) {
         case "getWindows":
           EE.emit("getWindows", arg.wins);

@@ -29,10 +29,11 @@
 </template>
 
 <script>
+    import eventHub from "../tablist.js";
     export default {
         name: "tab",
-        props: { tab: Object, thumb: String },
-        data: function () { return { closing: false, touch: { x: NaN, y: NaN, deltaX: 0, deltaY: 0 } } },
+        props: { tab: Object, thumb: String ,port : Object },
+        data: function () { return {  closed:false,touch: { x: NaN, y: NaN, deltaX: 0, deltaY: 0 } } },
         computed: {
             favicon: function () {
                 return this.tab.favIconUrl || "";//chrome://favicon/size/16@2x/" + this.tab.url
@@ -50,11 +51,18 @@
                 }
             }
         },
+        created:function(){
+            this.eventHub.$on("tab-close", closeTab );
+        },
         methods: {
+            closeTab:function(tab) {
+                if( tab !== this.tab)return;
+                this.port.postMessage({ "message": "closeTab", "tabId": this.tab.id });
+                this.closed = true;
+            },
             emitEvent: function (name) { this.$emit(name, this.tab) },
             close: function () {
-                this.closed = true;
-                this.emitEvent("close");
+                this.closeTab(this.tab);
             },
             touchStart: function (e) {
                 this.touch.y = e.touches[0].pageY;
@@ -258,11 +266,15 @@ ul.tablist9 .thumb , ul.tablist6 .thumb{
 }
 
 .tab.closed .restore-button{
-     background: rgba(255,255,255,0.8);
+     background: rgba(255,255,255,0.5);
      align-items: center; 
      align-content: center; 
      display: flex; 
      padding: 5px 10px;
+}
+
+.tab.closed:hover .restore-button{ 
+    background: rgba(255,255,255,1);
 }
 
 .frameclose{
