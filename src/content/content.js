@@ -1,15 +1,29 @@
 function openAruTab() {
-    if ($("#arutab-insert-iframe").length == 0) {
-        jQuery("<iframe>").attr("id", "arutab-insert-iframe")
-            .attr("src", chrome.runtime.getURL("tablist/tablist.html"))
-            .on("load", function () { $(this).addClass("arutab-iframe-visible") })
-            .appendTo("body");
+    if ($("#arutab-insert-container").length == 0) {
+        jQuery("<div id='arutab-insert-container'/>").append(
+            jQuery("<iframe>").attr("id", "arutab-insert-iframe")
+                .attr("src", chrome.runtime.getURL("tablist/tablist.html"))
+                .on("load", function () { $("#arutab-insert-container").addClass("arutab-container-visible") })
+        ).on("click",frameMarginClick).appendTo("body")
         //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
-    }
+        return true;
+    } else { return false;}
+}
+
+function toggleAruTab() {
+    if (!openAruTab()) closeAruTab();
+}
+
+function frameMarginClick(e)
+{
+    if (e.target.id === "arutab-insert-container")
+    {
+        closeAruTab();
+    }    
 }
 
 function closeAruTab() {
-    jQuery("#arutab-insert-iframe").remove();
+    jQuery("#arutab-insert-container").remove();
 }
 
 chrome.runtime.onMessage.addListener(msg => {
@@ -19,13 +33,13 @@ chrome.runtime.onMessage.addListener(msg => {
 $(function () {
     $(document).on("keydown", e => {
         if (e.ctrlKey && e.keyCode == 81) {
-            openAruTab();
+            toggleAruTab();
         }
     })
 });
 keyStatus = {};
 
-
+/*
 $(document).on("keydown", (e) => {
     if (e.keyCode == 27 && jQuery("#arutab-insert-iframe").length != 0) {
         closeAruTab();
@@ -68,3 +82,4 @@ window.addEventListener("mousewheel", (e) => {
     return;
 
 });
+*/

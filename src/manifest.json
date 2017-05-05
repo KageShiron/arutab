@@ -6,7 +6,8 @@
     "permissions": [
         "<all_urls>",
         "tabs",
-        "storage"
+        "storage",
+        "sessions"
     ],
     "content_scripts": [
         {
