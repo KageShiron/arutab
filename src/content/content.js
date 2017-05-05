@@ -18,7 +18,7 @@ function frameMarginClick(e)
 {
     if (e.target.id === "arutab-insert-container")
     {
-        toggleAruTab();
+        closeAruTab();
     }    
 }
 
@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener(msg => {
 $(function () {
     $(document).on("keydown", e => {
         if (e.ctrlKey && e.keyCode == 81) {
-            openAruTab();
+            toggleAruTab();
         }
     })
 });
