@@ -26,7 +26,7 @@
 
 
   function closeAruTab() {
-    this.tabadata.port.postMessage({ "message": "closeAruTab" });
+    tabdata.port.postMessage({ "message": "closeAruTab" });
   }
 
 
