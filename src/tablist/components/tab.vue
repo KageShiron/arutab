@@ -19,6 +19,12 @@
         <div class="thumbarea">
             <img :src="thumb" class="thumb" />
         </div>
+        <div class="restore-tab">
+            <div class="restore-button">
+                <img src="../assets/refresh.svg" />
+                タブを復元
+            </div>
+        </div>
     </li>
 </template>
 
@@ -32,7 +38,7 @@
                 return this.tab.favIconUrl || "";//chrome://favicon/size/16@2x/" + this.tab.url
             },
             tabClass: function () {
-                return ["tab", this.closing ? "closing" : ""
+                return ["tab", this.closed ? "closed" : ""
                     , this.touch.deltaY != 0 ? "touching" : ""
                     , (this.touch.deltaY < -250 || this.touch.deltaY) > 250 ? "touchclosing" : ""
                     , this.tab.highlighted ? "highlight" : ""];
@@ -47,7 +53,7 @@
         methods: {
             emitEvent: function (name) { this.$emit(name, this.tab) },
             close: function () {
-                this.closing = true;
+                this.closed = true;
                 this.emitEvent("close");
             },
             touchStart: function (e) {
@@ -164,10 +170,6 @@ ul.tablist9 .thumb , ul.tablist6 .thumb{
     align-items: center;
 }
 
-.removing{
-    transition:opacity 100ms ease;
-    opacity:0 !important;
-}
 
 
 .tab:hover{
@@ -181,6 +183,10 @@ ul.tablist9 .thumb , ul.tablist6 .thumb{
     background-color:#445;
 }
 
+.tab.closed .header,.tab.closed .thumbarea{
+    opacity:0.1;
+}
+
 .title{
     font-size:17px;
     line-height:17px;
@@ -191,9 +197,6 @@ ul.tablist9 .thumb , ul.tablist6 .thumb{
     color:#999;
 }
 
-.closing{
-    opacity:0!important;
-}
 .touchclosing{
     background: #660000 !important;
 }
@@ -238,6 +241,29 @@ ul.tablist9 .thumb , ul.tablist6 .thumb{
     background-color:rgba(255,255,255,0.5);
 }
 
+.tab .restore-tab{
+    display:none;
+}
+
+.tab.closed .restore-tab{
+    width:100%;
+    height:100%;
+    position:absolute;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    top:0;
+    left:0;
+    background:rgba(255,255,255,0.2);
+}
+
+.tab.closed .restore-button{
+     background: rgba(255,255,255,0.8);
+     align-items: center; 
+     align-content: center; 
+     display: flex; 
+     padding: 5px 10px;
+}
 
 .frameclose{
     height:55px;

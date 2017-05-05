@@ -25,7 +25,8 @@
   const chromep = new ChromePromise();
 
   function closeTab(tabid) {
-    port.postMessage({ "message": "closeTab", "tabId": tabid });
+    port.postMessage({ "message": "closeTab", "tabId": tabid }); 
+    $(".closing").addClass("closed");
   }
 
   function closeAruTab() {
@@ -35,18 +36,6 @@
   function changeTab(tabid, winid) {
     $("html").css("display", "none").remove();
     port.postMessage({ "message": "changeTab", "tabId": tabid, "windowId": winid });
-  }
-
-  function closingTab() {
-
-    $(".closing").css("width", "0").delay(180).queue(() => {
-      for (const w of tabdata.windows) {
-        w.tabs.forEach((t, i) => {
-          closingTabs.forEach(cid => { if (t.id === cid) { w.tabs.splice(i, 1); } })
-        });
-        w.tabs.forEach(t => console.log(t.id));
-      }
-    });
   }
 
   let App = {
@@ -61,9 +50,6 @@
       close: function (tab) {
         if (closingTabs.includes(tab.id))return;
         closeTab(tab.id);
-        closingTabs.push(tab.id);
-        if (closeTimer) clearTimeout(closeTimer);
-        closeTimer = setTimeout(() => closingTab(tab.id), 1000);
 
       },
       closeWindow: function () {
