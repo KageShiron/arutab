@@ -18,7 +18,7 @@
   import WinHeader from "./components/win-header.vue"
   import eventHub from "./tablist.js"
 
-  let tabdata = { windows: [], thumbs: [], selected: {}, focused: NaN , port:null };
+  let tabdata = { windows: [], thumbs: [], selected: {}, focused: NaN, port: null };
   let EE = new EventEmitter();
   let closeTimer = null;
   let closingTabs = [];
@@ -44,7 +44,7 @@
       tabclick: function (tab) { changeTab(tab.id, tab.windowId); },
       mouseenter: function (tab) { tabdata.selected = tab },
       close: function (tab) {
-        eventHub.$emit("tab-close",tab);
+        eventHub.$emit("tab-close", tab);
       },
       closeWindow: function () {
         closeAruTab();
@@ -63,7 +63,7 @@
         slider.swiper({
           mousewheelControl: true,    // Optional parameters
           loop: true,
-          mousewheelForceToAxis:true,
+          mousewheelForceToAxis: true,
           initialSlide: tabdata.focused,
 
           // If we need pagination
@@ -128,12 +128,12 @@
 </script>
 
 <style>
-
-body{
-  background:#333;
-  margin:0;
-}
-.tablist-invisible{
-  display:none;
-}
+  body {
+    background: #333;
+    margin: 0;
+  }
+  
+  .tablist-invisible {
+    display: none;
+  }
 </style>

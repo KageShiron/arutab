@@ -8,6 +8,6 @@ new Vue({
   render: h => h(TabList)
 })
 
-document.addEventListener( "wheel",e => {
+document.addEventListener("wheel", e => {
   e.preventDefault();
 })

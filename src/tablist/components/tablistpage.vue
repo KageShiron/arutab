@@ -1,41 +1,46 @@
 <template>
     <ul :class="tablistClass">
-        <tab :key="tab.id" v-for="(tab,key) in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" :port="port"
-         @click="emitEvent('click',$event)"　@mouseenter="emitEvent('mouseenter',$event)" @close="emitEvent('close',$event)" />
+        <tab :key="tab.id" v-for="(tab,key) in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" :port="port" @click="emitEvent('click',$event)"
+            　@mouseenter="emitEvent('mouseenter',$event)" @close="emitEvent('close',$event)" />
     </ul>
 </template>
 
 <style>
-ul.tablist{
-    list-style-type: none;
-    width:100%;
-    display:flex;
-    flex-wrap:wrap;
-    padding:0;
-    height:calc(100vh - 60px);
-    margin:0;
-    z-index:1000000;
-}
-ul.tablist6 li{
-    width:33%;
-    height:50%;
-}
-ul.tablist9 li{
-    width:33%;
-    height:33%;
-}
-ul.tablist12 li{
-    width:25%;
-    height:33%;
-}
-ul.tablist16 li{
-    width:25%;
-    height:23%;
-}
-ul.tablist25 li{
-    width:20%;
-    height:18%;
-}
+    ul.tablist {
+        list-style-type: none;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        height: calc(100vh - 60px);
+        margin: 0;
+        z-index: 1000000;
+    }
+    
+    ul.tablist6 li {
+        width: 33%;
+        height: 50%;
+    }
+    
+    ul.tablist9 li {
+        width: 33%;
+        height: 33%;
+    }
+    
+    ul.tablist12 li {
+        width: 25%;
+        height: 33%;
+    }
+    
+    ul.tablist16 li {
+        width: 25%;
+        height: 23%;
+    }
+    
+    ul.tablist25 li {
+        width: 20%;
+        height: 18%;
+    }
 </style>
 
 <script>
@@ -46,7 +51,7 @@ ul.tablist25 li{
             "tabs": Array,
             "thumbs": Object,
             "onHover": Function,
-            "port":Object,
+            "port": Object,
         },
         computed: {
             tablistClass: function () {
@@ -65,4 +70,5 @@ ul.tablist25 li{
         },
         components: { "tab": Tab }
     }
+
 </script>

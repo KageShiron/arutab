@@ -10,12 +10,13 @@ chrome.runtime.onConnect.addListener(p => {
                 });
                 break;
             case "getWindows":
-                chrome.windows.getAll({ populate: true }, wins =>{
-                    p.postMessage({ "message": "getWindows", "wins": wins })});
+                chrome.windows.getAll({ populate: true }, wins => {
+                    p.postMessage({ "message": "getWindows", "wins": wins })
+                });
                 break;
             case "changeTab":
                 chrome.tabs.update(msg.tabId, { active: true });
-                chrome.windows.update(msg.windowId,{focused:true});
+                chrome.windows.update(msg.windowId, { focused: true });
                 closeAruTab();
                 break;
             case "closeTab":
@@ -51,10 +52,8 @@ function cleanUpImages() {
         chrome.tabs.query({}, tabs => {
             const idlist = tabs.map(t => t.id);
             let removeList = [];
-            for ( index in list)
-            {
-                if (!idlist.includes(parseInt( index)))
-                {
+            for (index in list) {
+                if (!idlist.includes(parseInt(index))) {
                     removeList.push(index);
                 }
             }
