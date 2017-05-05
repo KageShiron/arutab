@@ -1,8 +1,7 @@
 div#arutab-insert-container{
     position:fixed;
-    top: -99999px;
-    width: calc( 100%);
-    height: calc(100%);
+    width: 100%;
+    height: 100%;
     padding:15px;
     border: none;
     top:0;
@@ -18,4 +17,5 @@ div#arutab-insert-container.arutab-container-visible{
 iframe#arutab-insert-iframe{
     height:100%;
     width:100%;
+    border:none;
 }
