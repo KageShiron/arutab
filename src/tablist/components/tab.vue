@@ -1,6 +1,6 @@
 <template>
-    <li :class="tabClass" @click="click($event)" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)"
-        @wheel="wheel" @touchmove.prevent="touchMove($event)" @touchend="touchEnd($event)" :style="tabStyle">
+    <li :class="tabClass" @click="click($event)" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)" @wheel="wheel"
+        @touchmove.prevent="touchMove($event)" @touchend="touchEnd($event)" :style="tabStyle">
         <div class="header">
             <img class="favicon" :src="favicon" />
             <div class="title_url">
@@ -19,7 +19,7 @@
         <div class="thumbarea">
             <img :src="thumb" class="thumb" />
         </div>
-        <div class="restore-tab">
+        <div class="restore-tab" @click.stop="restore">
             <div class="restore-button">
                 <img src="../assets/refresh.svg" /> タブを復元
             </div>
@@ -51,7 +51,7 @@
             }
         },
         created: function () {
-            this.eventHub.$on("tab-close", closeTab);
+            eventHub.$on("tab-close", this.closeTab);
         },
         methods: {
             closeTab: function (tab) {
@@ -67,12 +67,22 @@
                 $("html").css("display", "none").remove();
                 this.port.postMessage({
                     "message": "changeTab",
-                    "tabId": this.tab.id, 
+                    "tabId": this.tab.id,
                     "windowId": this.tab.windowId
                 });
             },
-            click:function(e){
+            click: function (e) {
                 this.changeTab();
+            },
+            restore: function () {
+                const me = this;
+                chrome.sessions.getRecentlyClosed( (ss) => {
+                    for( const s of ss ) {
+                        if(s.tab.url === me.tab.url) {
+                            chrome.sessions.restore(s.tab.id, () => { });
+                        }
+                    }
+                });
             },
             touchStart: function (e) {
                 this.touch.y = e.touches[0].pageY;
