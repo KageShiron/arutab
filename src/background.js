@@ -37,12 +37,30 @@ let captureTabTimer = null;
 function capture(tabId) {
     if (captureTabTimer) clearTimeout(captureTabTimer);
     captureTabTimer = setTimeout(() => {
+        cleanUpImages();
         chrome.tabs.captureVisibleTab(null, { "format": "jpeg" }, capt => {
             chrome.windows.getCurrent(win => chrome.tabs.getSelected(win.id, tab => {    //check is the same tab;
                 if (tab.id == tabId) reductionImage(capt, tabId);
             }))
         })
     }, 1000);
+}
+
+function cleanUpImages() {
+    chrome.storage.local.get(list => {
+        chrome.tabs.query({}, tabs => {
+            const idlist = tabs.map(t => t.id);
+            let removeList = [];
+            for ( index in list)
+            {
+                if (!idlist.includes(parseInt( index)))
+                {
+                    removeList.push(index);
+                }
+            }
+            chrome.storage.local.remove(removeList);
+        })
+    });
 }
 
 function reductionImage(source, id) {
