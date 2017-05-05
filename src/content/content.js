@@ -6,14 +6,19 @@ function openAruTab() {
                 .on("load", function () { $("#arutab-insert-container").addClass("arutab-container-visible") })
         ).on("click",frameMarginClick).appendTo("body")
         //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
-    }
+        return true;
+    } else { return false;}
+}
+
+function toggleAruTab() {
+    if (!openAruTab()) closeAruTab();
 }
 
 function frameMarginClick(e)
 {
     if (e.target.id === "arutab-insert-container")
     {
-        closeAruTab();
+        toggleAruTab();
     }    
 }
 
