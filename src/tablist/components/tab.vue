@@ -1,5 +1,5 @@
 <template>
-    <li :class="tabClass" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)" @wheel="wheel"
+    <li :class="tabClass" @mouseup="click($event)" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)" @wheel="wheel"
         @touchmove.prevent="touchMove($event)" @touchend="touchEnd($event)" :style="tabStyle">
         <div class="header">
             <img class="favicon" :src="favicon" />
@@ -46,6 +46,14 @@
         },
         methods: {
             emitEvent: function (name) { this.$emit(name, this.tab) },
+            click:function(e){
+                if(e.button === 1)  //middle button
+                {
+                    this.close();
+                }else{
+                    this.emitEvent("click");
+                }
+            },
             close: function () {
                 this.closing = true;
                 this.emitEvent("close");
@@ -178,7 +186,7 @@ ul.tablist9 .thumb , ul.tablist6 .thumb{
 
 
 .tab.highlight{
-    background-color:#445;
+    background-color:#557;
 }
 
 .title{
