@@ -59,6 +59,7 @@
       tabclick: function (tab) { changeTab(tab.id, tab.windowId); },
       mouseenter: function (tab) { tabdata.selected = tab },
       close: function (tab) {
+        if (closingTabs.includes(tab.id))return;
         closeTab(tab.id);
         closingTabs.push(tab.id);
         if (closeTimer) clearTimeout(closeTimer);
@@ -82,6 +83,7 @@
         slider.swiper({
           mousewheelControl: true,    // Optional parameters
           loop: true,
+          mousewheelForceToAxis:true,
           initialSlide: tabdata.focused,
 
           // If we need pagination

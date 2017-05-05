@@ -1,5 +1,5 @@
 <template>
-    <li :class="tabClass" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)"
+    <li :class="tabClass" @click="emitEvent('click')" @mouseenter="emitEvent('mouseenter')" @touchstart="touchStart($event)" @wheel="wheel"
         @touchmove.prevent="touchMove($event)" @touchend="touchEnd($event)" :style="tabStyle">
         <div class="header">
             <img class="favicon" :src="favicon" />
@@ -67,6 +67,13 @@
                     this.close();
                 } else {
                     this.touch.deltaY = 0;
+                }
+            },
+            wheel:function(e){
+                if( e.deltaY > 30 )
+                {
+                    console.log(e);
+                    this.close();
                 }
             }
 
@@ -184,7 +191,7 @@ ul.tablist9 .thumb , ul.tablist6 .thumb{
     color:#999;
 }
 
-.closing.touchclosing{
+.closing{
     opacity:0!important;
 }
 .touchclosing{

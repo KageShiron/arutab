@@ -25,7 +25,7 @@ $(function () {
 });
 keyStatus = {};
 
-
+/*
 $(document).on("keydown", (e) => {
     if (e.keyCode == 27 && jQuery("#arutab-insert-iframe").length != 0) {
         closeAruTab();
@@ -68,3 +68,4 @@ window.addEventListener("mousewheel", (e) => {
     return;
 
 });
+*/
