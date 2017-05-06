@@ -19,7 +19,7 @@
         <div class="thumbarea">
             <img :src="thumb" class="thumb" />
         </div>
-        <div class="restore-tab" @click.stop="restore">
+        <div class="restore-tab" @mouseup.stop="restore">
             <div class="restore-button">
                 <img src="../assets/refresh.svg" /> タブを復元
             </div>
