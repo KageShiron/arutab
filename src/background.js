@@ -6,17 +6,17 @@ chrome.runtime.onConnect.addListener(p => {
         switch (msg.message) {
             case "getTabs":
                 chrome.tabs.getAllInWindow(null, (tabs) => {
-                    p.postMessage({ "message": "getTabs", "tabs": tabs });
+                    p.postMessage({"message": "getTabs", "tabs": tabs});
                 });
                 break;
             case "getWindows":
-                chrome.windows.getAll({ populate: true }, wins => {
-                    p.postMessage({ "message": "getWindows", "wins": wins })
+                chrome.windows.getAll({populate: true}, wins => {
+                    p.postMessage({"message": "getWindows", "wins": wins})
                 });
                 break;
             case "changeTab":
-                chrome.tabs.update(msg.tabId, { active: true });
-                chrome.windows.update(msg.windowId, { focused: true });
+                chrome.tabs.update(msg.tabId, {active: true});
+                chrome.windows.update(msg.windowId, {focused: true});
                 closeAruTab();
                 break;
             case "closeTab":
@@ -39,7 +39,7 @@ function capture(tabId) {
     if (captureTabTimer) clearTimeout(captureTabTimer);
     captureTabTimer = setTimeout(() => {
         cleanUpImages();
-        chrome.tabs.captureVisibleTab(null, { "format": "jpeg" }, capt => {
+        chrome.tabs.captureVisibleTab(null, {"format": "jpeg"}, capt => {
             chrome.windows.getCurrent(win => chrome.tabs.getSelected(win.id, tab => {    //check is the same tab;
                 if (tab.id == tabId) reductionImage(capt, tabId);
             }))
@@ -72,7 +72,8 @@ function reductionImage(source, id) {
         ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, can.width, can.height);
         let obj = {};
         obj[id] = can.toDataURL("image/jpeg");
-        chrome.storage.local.set(obj, () => { });
+        chrome.storage.local.set(obj, () => {
+        });
     };
 
     img.src = source;
@@ -80,11 +81,11 @@ function reductionImage(source, id) {
 
 //########## tabs events
 function updatedTabs() {
-    if (port) port.postMessage({ "message": "updateTabList" })
+    if (port) port.postMessage({"message": "updateTabList"})
 }
 
 function closeAruTab() {
-    if (port) chrome.tabs.sendMessage(port.sender.tab.id, { "message": "closeAruTab" });
+    if (port) chrome.tabs.sendMessage(port.sender.tab.id, {"message": "closeAruTab"});
 }
 
 chrome.tabs.onActivated.addListener((info) => {

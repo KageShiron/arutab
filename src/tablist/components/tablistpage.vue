@@ -1,7 +1,8 @@
 <template>
     <ul :class="tablistClass">
-        <tab :key="tab.id" v-for="(tab,key) in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" :port="port" @click="emitEvent('click',$event)"
-            　@mouseenter="emitEvent('mouseenter',$event)" @close="emitEvent('close',$event)" />
+        <tab :key="tab.id" v-for="(tab,key) in tabs" :style="tabStyle" :tab="tab" :thumb="thumbs[tab.id]" :port="port"
+             @click="emitEvent('click',$event)"
+             　@mouseenter="emitEvent('mouseenter',$event)" @close="emitEvent('close',$event)"/>
     </ul>
 </template>
 
@@ -16,27 +17,27 @@
         margin: 0;
         z-index: 1000000;
     }
-    
+
     ul.tablist6 li {
         width: 33%;
         height: 50%;
     }
-    
+
     ul.tablist9 li {
         width: 33%;
         height: 33%;
     }
-    
+
     ul.tablist12 li {
         width: 25%;
         height: 33%;
     }
-    
+
     ul.tablist16 li {
         width: 25%;
         height: 23%;
     }
-    
+
     ul.tablist25 li {
         width: 20%;
         height: 18%;
@@ -62,13 +63,15 @@
                 return ["tablist", "tablist" + size]
             },
             tabStyle: function () {
-                return this.tabs.length <= 16 ? {} : { height: 100 / (((this.tabs.length + 4) / 5) | 0) + "%" };
+                return this.tabs.length <= 16 ? {} : {height: 100 / (((this.tabs.length + 4) / 5) | 0) + "%"};
             }
         },
         methods: {
-            emitEvent: function (name, tab) { this.$emit(name, tab); }
+            emitEvent: function (name, tab) {
+                this.$emit(name, tab);
+            }
         },
-        components: { "tab": Tab }
+        components: {"tab": Tab}
     }
 
 </script>
