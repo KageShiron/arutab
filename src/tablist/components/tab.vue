@@ -119,8 +119,8 @@
             },
             wheel: function (e) {
                 if (e.deltaY > 30) {
-                    console.log(e);
-                    this.close();
+                    //console.log(e);
+                    //this.close();
                 }
             }
 

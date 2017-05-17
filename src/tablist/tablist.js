@@ -7,7 +7,3 @@ new Vue({
     el: '#app',
     render: h => h(TabList)
 })
-
-document.addEventListener("wheel", e => {
-    e.preventDefault();
-})

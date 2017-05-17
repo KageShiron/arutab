@@ -62,9 +62,10 @@
                     slider[0].swiper.unlockSwipes();
             } else {
                 slider.swiper({
-                    mousewheelControl: true,    // Optional parameters
+                    /*mousewheelControl: true,    // Optional parameters
                     loop: true,
-                    mousewheelForceToAxis: true,
+                    mousewheelForceToAxis: true,*/
+                    direction:"vertical",
                     initialSlide: tabdata.focused,
 
                     // If we need pagination
@@ -74,9 +75,6 @@
                     // Navigation arrows
                     nextButton: '.swiper-button-next',
                     prevButton: '.swiper-button-prev',
-                    onSlideChangeEnd: (s) => {
-                        s.fixLoop();
-                    }
 
                 });
                 if (tabdata.windows.length == 1)
@@ -134,9 +132,14 @@
     body {
         background: #333;
         margin: 0;
+        overflow:hidden;
     }
 
     .tablist-invisible {
         display: none;
+    }
+    .swiper-slide-active{
+        height:calc(100vh - 60px) !important;
+        overflow:scroll;
     }
 </style>
