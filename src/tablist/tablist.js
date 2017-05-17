@@ -7,3 +7,7 @@ new Vue({
     el: '#app',
     render: h => h(TabList)
 })
+
+document.body.addEventListener("mousewheel",e => {
+    e.preventDefault();
+})

@@ -118,9 +118,10 @@
                 }
             },
             wheel: function (e) {
-                if (e.deltaY > 30) {
-                    //console.log(e);
-                    //this.close();
+                if (e.deltaX > 30) {
+                    console.log(e);
+                    this.close();
+                    e.preventDefault();
                 }
             }
 

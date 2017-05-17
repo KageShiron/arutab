@@ -6,7 +6,7 @@ function openAruTab() {
                 .on("load", function () {
                     $("#arutab-insert-container").addClass("arutab-container-visible")
                 })
-        ).on("click", frameMarginClick).appendTo("body")
+        ).on("click", frameMarginClick).appendTo("body");
         //setTimeout(() => jQuery("#arutab-insert-iframe").remove(), 10000); 
         return true;
     } else {
@@ -40,6 +40,7 @@ $(function () {
     })
 });
 keyStatus = {};
+
 
 /*
  $(document).on("keydown", (e) => {

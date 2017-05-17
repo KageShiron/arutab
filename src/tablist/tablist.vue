@@ -3,7 +3,7 @@
         <win-header :selected="selected" @closeWindow="closeWindow"/>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div v-for="win in windows" class="swiper-slide">
+                <div v-for="win in windows" class="swiper-slide" @mousewheel="wheel($event)" @scroll="scroll($event)">
                     <tablist-page :tabs="win.tabs" :thumbs="thumbs" :port="port" @click="tabclick"
                                   @mouseenter="mouseenter" @close="close"/>
                 </div>
@@ -23,6 +23,10 @@
     let EE = new EventEmitter();
     let closeTimer = null;
     let closingTabs = [];
+    let wheelValue = 0;
+    let scrolled = false;
+    let scrolledTimer;
+    let wheelTimer;
     const chromep = new ChromePromise();
 
 
@@ -49,6 +53,39 @@
             },
             closeWindow: function () {
                 closeAruTab();
+            },
+            wheel : function(e){
+                const active = $(".swiper-slide-active")[0];
+                if( active.scrollHeight === active.offsetHeight + active.scrtollTop  )
+                    e.preventDefault();
+
+                if(scrolledTimer) {
+                    wheelValue -= e.deltaY;
+                }else {
+                    wheelValue += e.deltaY;
+                    console.log(wheelValue);
+                    if (wheelTimer) clearTimeout(wheelTimer);
+                    wheelTimer = setTimeout(() => {
+                        wheelValue = 0
+                    }, 50);
+                    if (wheelValue > 2000) {
+                        $(".swiper-container")[0].swiper.slideNext();
+                        wheelValue = 0;
+                    } else if (wheelValue < -2000) {
+                        $(".swiper-container")[0].swiper.slidePrev();
+                        wheelValue = 0;
+                    }
+                }
+            },
+            scroll : function(e){
+                if(scrolledTimer)
+                {
+                    clearTimeout(scrolledTimer);
+                    scrolledTimer = null;
+                }
+                scrolledTimer = setTimeout( () => {
+                    scrolledTimer = null;
+                },300);
             }
         },
         updated: function () {
@@ -139,7 +176,7 @@
         display: none;
     }
     .swiper-slide-active{
-        height:calc(100vh - 60px) !important;
+        height:calc(100vh - 55px) !important;
         overflow:scroll;
     }
 </style>
