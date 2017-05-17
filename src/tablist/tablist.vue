@@ -24,8 +24,7 @@
     let closeTimer = null;
     let closingTabs = [];
     let wheelValue = 0;
-    let scrolled = false;
-    let scrolledTimer;
+    let pageChangedTimer;
     let wheelTimer;
     const chromep = new ChromePromise();
 
@@ -36,91 +35,82 @@
 
 
     let App = {
-        name: "tablist",
-        data: function () {
-            return tabdata;
-        },
-        components: {"tablist-page": TablistPage, "win-header": WinHeader},
-        methods: {
-            tabclick: function (tab) {
-                changeTab(tab.id, tab.windowId);
+            name: "tablist",
+            data: function () {
+                return tabdata;
             },
-            mouseenter: function (tab) {
-                tabdata.selected = tab
-            },
-            close: function (tab) {
-                eventHub.$emit("tab-close", tab);
-            },
-            closeWindow: function () {
-                closeAruTab();
-            },
-            wheel : function(e){
-                const active = $(".swiper-slide-active")[0];
-                if( active.scrollHeight === active.offsetHeight + active.scrtollTop  )
-                    e.preventDefault();
-
-                if(scrolledTimer) {
-                    wheelValue -= e.deltaY;
-                }else {
-                    wheelValue += e.deltaY;
-                    console.log(wheelValue);
-                    if (wheelTimer) clearTimeout(wheelTimer);
-                    wheelTimer = setTimeout(() => {
-                        wheelValue = 0
-                    }, 50);
-                    if (wheelValue > 2000) {
-                        $(".swiper-container")[0].swiper.slideNext();
-                        wheelValue = 0;
-                    } else if (wheelValue < -2000) {
-                        $(".swiper-container")[0].swiper.slidePrev();
-                        wheelValue = 0;
+            components: {"tablist-page": TablistPage, "win-header": WinHeader},
+            methods: {
+                tabclick: function (tab) {
+                    changeTab(tab.id, tab.windowId);
+                },
+                mouseenter: function (tab) {
+                    tabdata.selected = tab
+                },
+                close: function (tab) {
+                    eventHub.$emit("tab-close", tab);
+                },
+                closeWindow: function () {
+                    closeAruTab();
+                },
+                wheel: function (e) {
+                    const active = $(".swiper-slide-active")[0];
+                    if(pageChangedTimer)e.preventDefault();
+                    if (  (active.scrollTop === 0 && e.deltaY < 0 )
+                        || (active.scrollHeight === active.offsetHeight + active.scrollTop && e.deltaY > 0)) {
+                        e.preventDefault();
+                        wheelValue += e.deltaY;
+                        if (wheelTimer) clearTimeout(wheelTimer);
+                        wheelTimer = setTimeout(() => {
+                            wheelValue = 0
+                        }, 50);
+                        if (wheelValue > 2000) {
+                            $(".swiper-container")[0].swiper.slideNext();
+                            wheelValue = 0;
+                            pageChangedTimer = setTimeout( () => {pageChangedTimer = null},100);
+                        } else if (wheelValue < -2000) {
+                            $(".swiper-container")[0].swiper.slidePrev();
+                            wheelValue = 0;
+                            pageChangedTimer = setTimeout( () => {pageChangedTimer = null},100);
+                        }
                     }
                 }
+
             },
-            scroll : function(e){
-                if(scrolledTimer)
-                {
-                    clearTimeout(scrolledTimer);
-                    scrolledTimer = null;
+            updated: function () {
+                if (isNaN(tabdata.focused)) return;
+                const slider = $(".swiper-container");
+                if (slider[0].swiper) {
+                    slider[0].swiper.update();
+                    if (tabdata.windows.length == 1)
+                        slider[0].swiper.lockSwipes();
+                    else
+                        slider[0].swiper.unlockSwipes();
+                } else {
+                    slider.swiper({
+                        /*mousewheelControl: true,    // Optional parameters
+                         loop: true,
+                         mousewheelForceToAxis: true,*/
+                        direction: "vertical",
+                        initialSlide: tabdata.focused,
+
+                        // If we need pagination
+                        pagination: '.swiper-pagination',
+                        paginationClickable: true,
+
+                        // Navigation arrows
+                        nextButton: '.swiper-button-next',
+                        prevButton: '.swiper-button-prev',
+
+                    });
+                    if (tabdata.windows.length == 1)
+                        slider[0].swiper.lockSwipes();
+                    else
+                        slider[0].swiper.unlockSwipes();
                 }
-                scrolledTimer = setTimeout( () => {
-                    scrolledTimer = null;
-                },300);
-            }
-        },
-        updated: function () {
-            if (isNaN(tabdata.focused)) return;
-            const slider = $(".swiper-container");
-            if (slider[0].swiper) {
-                slider[0].swiper.update();
-                if (tabdata.windows.length == 1)
-                    slider[0].swiper.lockSwipes();
-                else
-                    slider[0].swiper.unlockSwipes();
-            } else {
-                slider.swiper({
-                    /*mousewheelControl: true,    // Optional parameters
-                    loop: true,
-                    mousewheelForceToAxis: true,*/
-                    direction:"vertical",
-                    initialSlide: tabdata.focused,
-
-                    // If we need pagination
-                    pagination: '.swiper-pagination',
-                    paginationClickable: true,
-
-                    // Navigation arrows
-                    nextButton: '.swiper-button-next',
-                    prevButton: '.swiper-button-prev',
-
-                });
-                if (tabdata.windows.length == 1)
-                    slider[0].swiper.lockSwipes();
-                else
-                    slider[0].swiper.unlockSwipes();
             }
         }
-    };
+    ;
     export default App;
 
 
@@ -169,14 +159,24 @@
     body {
         background: #333;
         margin: 0;
-        overflow:hidden;
+        overflow: hidden;
     }
-
+    .swiper-container{
+        height:calc(100vh - 55px);
+    }
     .tablist-invisible {
         display: none;
     }
-    .swiper-slide-active{
-        height:calc(100vh - 55px) !important;
-        overflow:scroll;
+
+    .swiper-slide-active {
+        height: calc(100vh - 55px) !important;
+        overflow: scroll;
+    }
+    .swiper-slide:not(.swiper-slide-active)
+    {
+        visibility: hidden;
+    }
+    .swiper-container-vertical>.swiper-wrapper{
+        transition:none!important;;
     }
 </style>

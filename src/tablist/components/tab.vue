@@ -16,7 +16,6 @@
                 <img :class="{'visible' : tab.audible }" src="../assets/audible.svg"/>
             </div>
         </div>
-        </div>
         <div class="thumbarea">
             <img :src="thumb" class="thumb"/>
         </div>
@@ -70,7 +69,7 @@
                 {
                     this.close();
                 } else {
-                    this.emitEvent("click");
+                    this.changeTab();
                 }
             },
             close: function () {
@@ -84,9 +83,6 @@
                     "windowId": this.tab.windowId
                 });
             },
-            click: function (e) {
-                this.changeTab();
-            },
             restore: function () {
                 const me = this;
                 chrome.sessions.getRecentlyClosed((ss) => {
@@ -97,7 +93,7 @@
                         }
                     }
                 });
-            },
+            },/*
             touchStart: function (e) {
                 this.touch.y = e.touches[0].pageY;
             },
@@ -116,7 +112,7 @@
                 } else {
                     this.touch.deltaY = 0;
                 }
-            },
+            },*/
             wheel: function (e) {
                 if (e.deltaX > 30) {
                     console.log(e);
