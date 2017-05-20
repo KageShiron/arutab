@@ -3,7 +3,7 @@
         <win-header :selected="selected" @closeWindow="closeWindow"/>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div v-for="win in windows" class="swiper-slide" @mousewheel="wheel($event)" @scroll="scroll($event)">
+                <div v-for="win in windows" class="swiper-slide" @mousewheel="wheel($event)"  @scroll="scroll">
                     <tablist-page :tabs="win.tabs" :thumbs="thumbs" :port="port" @click="tabclick"
                                   @mouseenter="mouseenter" @close="close"/>
                 </div>
@@ -53,15 +53,19 @@
                 closeWindow: function () {
                     closeAruTab();
                 },
+                scroll : function(){
+                    pageChangedTimer = setTimeout( () => {pageChangedTimer = null},300);
+                },
                 wheel: function (e) {
                     const active = $(".swiper-slide-active")[0];
                     if(pageChangedTimer){   // no wheel when page changed
                         e.preventDefault();
                         return;
                     }
+                    console.log(wheelValue);
 
-                    if (  (active.scrollTop === 0 && e.deltaY < 0 )
-                        || (active.scrollHeight === active.offsetHeight + active.scrollTop && e.deltaY > 0)) {
+                    if (  (active.scrollTop < 10 && e.deltaY < 0 )
+                        || (active.scrollHeight - 10 < active.offsetHeight + active.scrollTop && e.deltaY > 0)) {
                         e.preventDefault();
                         wheelValue += e.deltaY;
                         if (wheelTimer) clearTimeout(wheelTimer);
