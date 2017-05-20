@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "chrome-promise": "^2.0.2",
-    "vue": "^2.1.0-csp"
+    "vue": "^2.1.0-csp",
+    "zingtouch": "^1.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
