@@ -1,14 +1,12 @@
 <template>
-    <li :class="tabClass" @mouseup="click($event)" @mouseenter="emitEvent('mouseenter')"
-        @touchstart="touchStart($event)" @wheel="wheel"
-        @touchmove.prevent="touchMove($event)" @touchend="touchEnd($event)" :style="tabStyle">
+    <li :class="tabClass" @mouseup="click($event)" @click="click" @mouseenter="emitEvent('mouseenter')"  @wheel="wheel" :style="tabStyle">
         <div class="header">
             <img class="favicon" :src="favicon"/>
             <div class="title_url">
                 <span class="title">{{ tab.title }}</span><br/>
                 <span class="url">{{ tab.url }}</span>
             </div>
-            <div class="closebutton" @click.stop="close">
+            <div class="closebutton" @mouseup.stop="close" @click.stop="close">
                 <img src="../assets/close.svg"/>
             </div>
             <div :class="['tabinfo',{visible : tab.pinned || tab.audible}]">
@@ -19,7 +17,7 @@
         <div class="thumbarea">
             <img :src="thumb" class="thumb"/>
         </div>
-        <div class="restore-tab" @mouseup.stop="restore">
+        <div class="restore-tab" @mouseup.stop="restore" @touchend.stop="restore">
             <div class="restore-button">
                 <img src="../assets/refresh.svg"/> タブを復元
             </div>
@@ -42,7 +40,7 @@
             },
             tabClass: function () {
                 return ["tab", this.closed ? "closed" : ""
-                    , this.touch.deltaY != 0 ? "touching" : ""
+                    , this.touch.deltaY !== 0 ? "touching" : ""
                     , (this.touch.deltaY < -250 || this.touch.deltaY) > 250 ? "touchclosing" : ""
                     , this.tab.highlighted ? "highlight" : ""];
             },
@@ -91,10 +89,15 @@
             },
             restore: function () {
                 const me = this;
+                if(this.tab.url === "chrome://newtab/")
+                {
+                    chrome.tabs.create({url:"chrome://newtab/"});
+                    return;
+                }
                 chrome.sessions.getRecentlyClosed((ss) => {
                     for (const s of ss) {
                         if (s.tab.url === me.tab.url) {
-                            chrome.sessions.restore(s.tab.id, () => {
+                            chrome.sessions.restore(s.tab.sessionId, () => {
                             });
                         }
                     }
@@ -121,7 +124,6 @@
             },*/
             wheel: function (e) {
                 if (e.deltaX > 30) {
-                    console.log(e);
                     this.close();
                     e.preventDefault();
                 }

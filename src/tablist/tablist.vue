@@ -1,11 +1,11 @@
 <template>
     <div id="tablist">
-        <win-header :selected="selected" @closeWindow="closeWindow"/>
+        <win-header :selected="selected" @closeWindow="closeWindow"></win-header>
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 <div v-for="win in windows" class="swiper-slide" @mousewheel="wheel($event)"  @scroll="scroll">
                     <tablist-page :tabs="win.tabs" :thumbs="thumbs" :port="port" @click="tabclick"
-                                  @mouseenter="mouseenter" @close="close"/>
+                                  @mouseenter="mouseenter" @close="close"></tablist-page>
                 </div>
             </div>
         </div>
@@ -21,8 +21,6 @@
 
     let tabdata = {windows: [], thumbs: [], selected: {}, focused: NaN, port: null};
     let EE = new EventEmitter();
-    let closeTimer = null;
-    let closingTabs = [];
     let wheelValue = 0;
     let pageChangedTimer;
     let wheelTimer;
@@ -133,14 +131,13 @@
                     const original = sw.slideTo;
                     sw.slideTo = function(p){  console.log(p);
                     original(( sw.slides.length + p) %  sw.slides.length) };
-                    if (tabdata.windows.length == 1)
+                    if (tabdata.windows.length === 1)
                         sw.lockSwipes();
                     else
                         sw.unlockSwipes();
                 }
             }
         }
-    ;
     export default App;
 
 
@@ -200,7 +197,7 @@
 
     .swiper-slide-active {
         height: calc(100vh - 55px) !important;
-        overflow: scroll;
+        overflow: auto;
     }
     .swiper-slide:not(.swiper-slide-active)
     {
