@@ -94,6 +94,9 @@
                 }
 
             },
+        mounted:function(){
+
+        },
             updated: function () {
                 if (isNaN(tabdata.focused)) return;
                 const slider = $(".swiper-container");

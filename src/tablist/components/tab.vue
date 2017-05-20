@@ -29,6 +29,7 @@
 
 <script>
     import eventHub from "../tablist.js";
+    import ZingTouch from "zingtouch";
     export default {
         name: "tab",
         props: {tab: Object, thumb: String, port: Object},
@@ -52,8 +53,13 @@
                 }
             }
         },
-        created: function () {
+        mounted: function () {
             eventHub.$on("tab-close", this.closeTab);
+
+            const myRegion = new ZingTouch.Region(document.body);
+            myRegion.bind(this.$el,eventHub.zingSwipe,() => {
+                this.close();
+            })
         },
         methods: {
             closeTab: function (tab) {

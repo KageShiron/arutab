@@ -2012,7 +2012,8 @@
                 }
                 if (s.swipeDirection === 'prev') {
                     if (ratio > (1 - s.params.longSwipesRatio)) s.slideTo(stopIndex + s.params.slidesPerGroup);
-                    else s.slideTo(stopIndex);
+                    else //s.slideTo(stopIndex);
+                        s.slideTo(s.realIndex - 1);
                 }
             }
             else {
