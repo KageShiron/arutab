@@ -55,7 +55,11 @@
                 },
                 wheel: function (e) {
                     const active = $(".swiper-slide-active")[0];
-                    if(pageChangedTimer)e.preventDefault();
+                    if(pageChangedTimer){   // no wheel when page changed
+                        e.preventDefault();
+                        return;
+                    }
+
                     if (  (active.scrollTop === 0 && e.deltaY < 0 )
                         || (active.scrollHeight === active.offsetHeight + active.scrollTop && e.deltaY > 0)) {
                         e.preventDefault();
@@ -63,17 +67,27 @@
                         if (wheelTimer) clearTimeout(wheelTimer);
                         wheelTimer = setTimeout(() => {
                             wheelValue = 0
-                        }, 50);
-                        if (wheelValue > 2000) {
-                            $(".swiper-container")[0].swiper.slideNext();
-                            wheelValue = 0;
-                            pageChangedTimer = setTimeout( () => {pageChangedTimer = null},100);
-                        } else if (wheelValue < -2000) {
-                            $(".swiper-container")[0].swiper.slidePrev();
-                            wheelValue = 0;
-                            pageChangedTimer = setTimeout( () => {pageChangedTimer = null},100);
+                        }, 200);
+                        const swiper = $(".swiper-container")[0].swiper;
+
+                        if (wheelValue > 1000) { //next
+                            if(swiper.isEnd)
+                                swiper.slideTo(0);
+                            else
+                                swiper.slideNext();
+
+                            wheelValue = -wheelValue*2;
+                            pageChangedTimer = setTimeout( () => {pageChangedTimer = null},300);
+                        } else if (wheelValue < -1000) {
+                            if(swiper.isBeginning)
+                                swiper.slideTo(swiper.slides.length - 1);
+                            else
+                                swiper.slidePrev();
+                            wheelValue = -wheelValue*2;
+                            pageChangedTimer = setTimeout( () => {pageChangedTimer = null},300);
                         }
                     }
+
                 }
 
             },
