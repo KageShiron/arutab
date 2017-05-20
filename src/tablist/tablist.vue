@@ -62,7 +62,6 @@
                         e.preventDefault();
                         return;
                     }
-                    console.log(wheelValue);
 
                     if (  (active.scrollTop < 10 && e.deltaY < 0 )
                         || (active.scrollHeight - 10 < active.offsetHeight + active.scrollTop && e.deltaY > 0)) {
@@ -100,7 +99,7 @@
                 const slider = $(".swiper-container");
                 if (slider[0].swiper) {
                     slider[0].swiper.update();
-                    if (tabdata.windows.length == 1)
+                    if (tabdata.windows.length === 1)
                         slider[0].swiper.lockSwipes();
                     else
                         slider[0].swiper.unlockSwipes();
@@ -120,11 +119,21 @@
                         nextButton: '.swiper-button-next',
                         prevButton: '.swiper-button-prev',
 
+                        simulateTouch : false,  // no mouse touch
+                        shortSwipes : false,
+                        longSwipesRatio : 0.2,
+                        longSwipesMs : 100,
+
+
                     });
+                    const sw = slider[0].swiper;
+                    const original = sw.slideTo;
+                    sw.slideTo = function(p){  console.log(p);
+                    original(( sw.slides.length + p) %  sw.slides.length) };
                     if (tabdata.windows.length == 1)
-                        slider[0].swiper.lockSwipes();
+                        sw.lockSwipes();
                     else
-                        slider[0].swiper.unlockSwipes();
+                        sw.unlockSwipes();
                 }
             }
         }
